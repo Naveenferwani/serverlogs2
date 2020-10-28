@@ -4,6 +4,7 @@ import com.serverlogs.application.dto.ServerLogs;
 import com.serverlogs.application.repository.ServerLogsRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 public class ServerLogsApplication {
 
     public static void main(String[] args) throws IOException, SQLException {
+        BasicConfigurator.configure();
         System.out.println("Enter File Path and Then Press Enter");
         Scanner sc = new Scanner(System.in);
         String fileName = sc.nextLine();
@@ -50,7 +52,7 @@ public class ServerLogsApplication {
             serverStartLogs.setAlert(timeElapsed > 4);
             finalServerLogs.add(serverStartLogs);
         }
-        serverLogsRepository.insertServerLogs(finalServerLogs);
+        serverLogsRepository.processServerLogs(finalServerLogs);
 
     }
 

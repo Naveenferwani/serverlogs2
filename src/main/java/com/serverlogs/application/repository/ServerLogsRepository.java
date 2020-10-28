@@ -1,22 +1,34 @@
 package com.serverlogs.application.repository;
 
 import com.serverlogs.application.dto.ServerLogs;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ServerLogsRepository {
 
     private final Logger LOG = Logger.getLogger(ServerLogsRepository.class.getName());
 
-    public void insertServerLogs(List<ServerLogs> serverLogs) throws SQLException {
+    /**
+     * Method to create table and Insert Log events
+     *
+     * @param serverLogs - Server Logs List
+     * @throws SQLException
+     */
+    public void processServerLogs(List<ServerLogs> serverLogs) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:hsqldb:file:serverlogsdb", "SA", "");
         createTableIfNotExits(connection);
         insertRecords(serverLogs, connection);
         connection.commit();
     }
 
+    /**
+     * Method to create Table if not AlreadyExists
+     *
+     * @param connection
+     * @throws SQLException
+     */
     private void createTableIfNotExits(Connection connection) throws SQLException {
         DatabaseMetaData dbm = connection.getMetaData();
         ResultSet tables = dbm.getTables(null, null, "SERVER_LOGS", null);
@@ -29,6 +41,13 @@ public class ServerLogsRepository {
         }
     }
 
+    /**
+     * Method to Insert Log Event
+     *
+     * @param serverLogsList
+     * @param connection
+     * @throws SQLException
+     */
     private void insertRecords(List<ServerLogs> serverLogsList, Connection connection) throws SQLException {
         String INSERT_SQL = "INSERT INTO SERVER_LOGS VALUES(?, ?, ?, ?, ?);";
         int count = 0;
@@ -41,6 +60,6 @@ public class ServerLogsRepository {
             preparedStatement.setBoolean(5, serverLogs.isAlert());
             count += preparedStatement.executeUpdate();
         }
-        LOG.info("Number of records Inserted:" +count);
+        LOG.debug("Number of records Inserted: " + count);
     }
 }
