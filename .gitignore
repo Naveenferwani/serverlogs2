@@ -1,0 +1,14 @@
+/.idea/
+/.settings/
+/.classpath
+/serverlogs.iml
+/serverlogsdb.log
+/serverlogsdb.properties
+/serverlogsdb.script
+/tesdb.log
+/tesdb.properties
+/tesdb.script
+/testdb.log
+/testdb.properties
+/testdb.script
+/.project
